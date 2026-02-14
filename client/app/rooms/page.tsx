@@ -4,7 +4,8 @@ import React from "react";
 import Link from "next/link";
 import PageHero from "@/components/layout/PageHero";
 import PrimaryButton from "@/components/ui/PrimaryButton";
-import { HiOutlineCloud, HiOutlineSun } from "react-icons/hi";
+import { HiOutlineCloud, HiOutlineSun, HiOutlineCheck, HiOutlineSparkles, HiOutlineTruck, HiOutlineFire } from "react-icons/hi";
+import roomImage from "../image/room.jpg";
 
 const rooms = [
   {
@@ -13,6 +14,8 @@ const rooms = [
     icon: HiOutlineCloud,
     features: ["King/ Twin beds", "Private bathroom", "AC", "Wi-Fi"],
     cta: "Book AC Room",
+    gradient: "from-[#0d9488] via-[#0f766e] to-[#0f172a]",
+    tagline: "Cool comfort",
   },
   {
     type: "Non-AC Room",
@@ -20,7 +23,24 @@ const rooms = [
     icon: HiOutlineSun,
     features: ["Comfortable beds", "Private bathroom", "Ceiling fan", "Wi-Fi"],
     cta: "Book Non-AC Room",
+    gradient: "from-[#1e293b] via-[#334155] to-[#0f172a]",
+    tagline: "Natural breeze",
   },
+];
+
+const allAmenities = [
+  "Private bathroom",
+  "Wi-Fi",
+  "Clean linen & towels",
+  "24/7 hot water",
+  "Room service",
+  "Safe & secure",
+];
+
+const exploreMore = [
+  { href: "/safari", label: "Safari Yala", desc: "Cab & tours", icon: HiOutlineTruck },
+  { href: "/river", label: "Kirindi River", desc: "Bathing & nature", icon: HiOutlineSparkles },
+  { href: "/food", label: "Restaurant", desc: "Dine in or delivery", icon: HiOutlineFire },
 ];
 
 export default function RoomsPage() {
@@ -28,10 +48,25 @@ export default function RoomsPage() {
     <>
       <PageHero
         title="Rooms"
-        subtitle="AC & Non-AC — choose what suits you."
+        subtitle="AC & Non-AC — choose what suits you. Clean, comfortable, and ready for your stay."
         compact
+        image={roomImage}
       />
-      <section className="py-16 sm:py-20 lg:py-24 bg-[var(--background)]">
+
+      {/* Intro */}
+      <section className="py-12 sm:py-16 bg-[var(--background)]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="text-slate-600 leading-relaxed text-lg">
+              Whether you prefer air-conditioned comfort or naturally cool rooms, we’ve got you covered. 
+              Both options include clean facilities, a warm welcome, and easy access to safari, river, and our restaurant.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Room cards */}
+      <section className="py-8 sm:py-12 lg:py-16 bg-[var(--section-alt)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12 lg:mb-16">
             <h2 className="section-title text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0f172a]">
@@ -41,27 +76,36 @@ export default function RoomsPage() {
               Choose between air-conditioned comfort or naturally cool non-AC rooms. Both come with clean facilities and a warm welcome.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 gap-8 lg:gap-10">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             {rooms.map((room, i) => (
               <div
                 key={room.type}
-                className="group bg-white rounded-2xl shadow-lg overflow-hidden hover-lift border border-slate-100"
+                className={`group bg-white rounded-2xl shadow-lg overflow-hidden hover-lift border border-slate-100 flex flex-col ${
+                  i % 2 === 1 ? "md:flex-col" : "md:flex-col"
+                }`}
               >
-                <div className="p-8 sm:p-10">
-                  <div className="w-14 h-14 rounded-xl bg-[#028EFC]/10 flex items-center justify-center text-[#028EFC] mb-6">
-                    <room.icon size={28} />
-                  </div>
+                {/* Visual block */}
+                <div className={`h-40 sm:h-48 flex-shrink-0 bg-gradient-to-br ${room.gradient} flex items-center justify-center relative overflow-hidden`}>
+                  <div className="absolute inset-0 opacity-20" style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.3' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 20V40H20L40 20z'/%3E%3C/g%3E%3C/svg%3E")`,
+                  }} />
+                  <span className="relative z-10 flex items-center justify-center w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-sm text-white">
+                    <room.icon size={40} />
+                  </span>
+                  <span className="absolute bottom-3 right-4 text-white/80 text-sm font-medium">{room.tagline}</span>
+                </div>
+                <div className="p-8 sm:p-10 flex flex-col flex-1">
                   <h3 className="section-title text-2xl font-bold text-[#0f172a]">
                     {room.type}
                   </h3>
-                  <p className="mt-3 text-slate-600 leading-relaxed">
+                  <p className="mt-3 text-slate-600 leading-relaxed flex-1">
                     {room.description}
                   </p>
                   <ul className="mt-4 flex flex-wrap gap-2">
                     {room.features.map((f) => (
                       <li
                         key={f}
-                        className="text-sm bg-slate-100 text-slate-700 px-3 py-1 rounded-full"
+                        className="text-sm bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full"
                       >
                         {f}
                       </li>
@@ -76,6 +120,77 @@ export default function RoomsPage() {
                   </div>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Amenities strip */}
+      <section className="py-12 sm:py-16 bg-[var(--background)]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="section-title text-xl sm:text-2xl font-bold text-[#0f172a] text-center mb-8">
+            Amenities at a Glance
+          </h2>
+          <ul className="flex flex-wrap justify-center gap-3 sm:gap-4">
+            {allAmenities.map((item) => (
+              <li
+                key={item}
+                className="flex items-center gap-2 bg-white border border-slate-100 rounded-xl px-4 py-3 shadow-sm text-slate-700 font-medium"
+              >
+                <HiOutlineCheck className="text-[#028EFC] shrink-0" size={20} />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Good to know */}
+      <section className="py-12 sm:py-16 bg-[var(--section-alt)]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-4xl mx-auto">
+            <div className="bg-white rounded-2xl p-6 lg:p-8 border border-slate-100 shadow-sm">
+              <h3 className="section-title text-lg font-bold text-[#0f172a] mb-3">Check-in & stay</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Check-in is flexible — just let us know your arrival time. All rooms are cleaned daily. 
+                Need extra towels or room service? Ask at reception or call us.
+              </p>
+            </div>
+            <div className="bg-white rounded-2xl p-6 lg:p-8 border border-slate-100 shadow-sm">
+              <h3 className="section-title text-lg font-bold text-[#0f172a] mb-3">Location</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                We’re near Yala National Park and Kirindi River — ideal for safari and river visits. 
+                Our restaurant is on-site, and we deliver food to your room or arrange safari and river trips.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Explore more */}
+      <section className="py-16 sm:py-20 lg:py-24 bg-[var(--section-alt)]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <h2 className="section-title text-2xl sm:text-3xl font-bold text-[#0f172a]">
+              What to Do Next
+            </h2>
+            <p className="mt-3 text-slate-600">
+              Make the most of your stay — safari, river, and great food are just a click away.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-6">
+            {exploreMore.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="group flex flex-col items-center p-8 rounded-2xl bg-white border border-slate-100 shadow-sm hover-lift text-center"
+              >
+                <span className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#028EFC]/10 text-[#028EFC] mb-4 group-hover:bg-[#028EFC]/20 transition-colors">
+                  <item.icon size={28} />
+                </span>
+                <span className="font-semibold text-[#0f172a]">{item.label}</span>
+                <span className="text-sm text-slate-500 mt-1">{item.desc}</span>
+              </Link>
             ))}
           </div>
         </div>

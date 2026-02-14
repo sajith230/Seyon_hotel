@@ -12,13 +12,15 @@ const navLinks = [
   { href: "/food", label: "Food" },
   { href: "/safari", label: "Safari Yala" },
   { href: "/river", label: "Kirindi River" },
-  { href: "/order", label: "Order Food" },
 ];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+
+  // At top of any page (over dark hero), use light text so navbar is visible on all pages
+  const isOverHero = !scrolled;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -41,7 +43,10 @@ export default function Navbar() {
         <nav className="flex items-center justify-between">
           <Link
             href="/"
-            className="section-title text-2xl sm:text-3xl font-bold text-[#0f172a] tracking-tight"
+            className={cn(
+              "section-title text-2xl sm:text-3xl font-bold tracking-tight transition-colors duration-200",
+              isOverHero ? "text-white hover:text-[var(--gold-light)]" : "text-[#0f172a]"
+            )}
           >
             Sayone
           </Link>
@@ -54,9 +59,13 @@ export default function Navbar() {
                   href={link.href}
                   className={cn(
                     "font-medium transition-colors duration-200",
-                    pathname === link.href
-                      ? "text-[#028EFC]"
-                      : "text-[#334155] hover:text-[#028EFC]"
+                    isOverHero
+                      ? pathname === link.href
+                        ? "text-[var(--gold-light)]"
+                        : "text-white/90 hover:text-[var(--gold-light)]"
+                      : pathname === link.href
+                        ? "text-[#028EFC]"
+                        : "text-[#334155] hover:text-[#028EFC]"
                   )}
                 >
                   {link.label}
@@ -68,7 +77,10 @@ export default function Navbar() {
           {/* Mobile menu button */}
           <button
             type="button"
-            className="md:hidden p-2 rounded-lg text-[#0f172a] hover:bg-white/80 transition-colors"
+            className={cn(
+              "md:hidden p-2 rounded-lg transition-colors",
+              isOverHero ? "text-white hover:bg-white/20" : "text-[#0f172a] hover:bg-white/80"
+            )}
             onClick={() => setIsOpen(!isOpen)}
             aria-label={isOpen ? "Close menu" : "Open menu"}
           >

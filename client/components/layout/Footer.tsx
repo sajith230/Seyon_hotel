@@ -10,7 +10,6 @@ const footerLinks = {
     { href: "/food", label: "Restaurant" },
     { href: "/safari", label: "Safari Yala" },
     { href: "/river", label: "Kirindi River" },
-    { href: "/order", label: "Order Food" },
   ],
 };
 
@@ -61,7 +60,6 @@ export default function Footer() {
               <li>Restaurant & Room Service</li>
               <li>Yala Safari Cab</li>
               <li>Kirindi River Bathing</li>
-              <li>Food Delivery</li>
             </ul>
           </div>
 
