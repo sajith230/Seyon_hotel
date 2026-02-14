@@ -12,6 +12,7 @@ const navLinks = [
   { href: "/food", label: "Food" },
   { href: "/safari", label: "Safari Yala" },
   { href: "/river", label: "Kirindi River" },
+  { href: "/order", label: "Order Food" },
 ];
 
 export default function Navbar() {

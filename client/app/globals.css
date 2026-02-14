@@ -102,6 +102,32 @@ body {
 .animation-delay-400 { animation-delay: 400ms; }
 .animation-delay-500 { animation-delay: 500ms; }
 
+/* Scroll-triggered reveal (used with AnimateInView) */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.animate-in-view.in-view .reveal-up {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-up.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-up.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-up.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* Stagger children delays */
+.stagger-children > *:nth-child(1) { transition-delay: 0ms; }
+.stagger-children > *:nth-child(2) { transition-delay: 80ms; }
+.stagger-children > *:nth-child(3) { transition-delay: 160ms; }
+.stagger-children > *:nth-child(4) { transition-delay: 240ms; }
+.stagger-children > *:nth-child(5) { transition-delay: 320ms; }
+.stagger-children > *:nth-child(6) { transition-delay: 400ms; }
+.stagger-children > *:nth-child(7) { transition-delay: 480ms; }
+.stagger-children > *:nth-child(8) { transition-delay: 560ms; }
+.stagger-children > *:nth-child(9) { transition-delay: 640ms; }
+.stagger-children > *:nth-child(10) { transition-delay: 720ms; }
+
 /* Navbar backdrop blur for glass effect */
 .navbar-glass {
   background: var(--nav-bg);
