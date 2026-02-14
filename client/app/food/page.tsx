@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import PageHero from "@/components/layout/PageHero";
 import AnimateInView from "@/components/animations/AnimateInView";
 import FoodGrid from "@/components/food/FoodGrid";
-import { dummyFoods } from "@/data/foods";
+import type { FoodItem } from "@/data/foods";
+import { getFoods } from "@/lib/storage";
 import { HiOutlineFire, HiOutlineCake, HiOutlineClock, HiOutlineLocationMarker, HiOutlineTruck, HiOutlineOfficeBuilding, HiOutlineSparkles, HiOutlineShoppingBag } from "react-icons/hi";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import Image from "next/image";
@@ -26,6 +27,11 @@ const exploreMore = [
 ];
 
 export default function FoodPage() {
+  const [foods, setFoods] = useState<FoodItem[]>([]);
+  useEffect(() => {
+    setFoods(getFoods());
+  }, []);
+
   return (
     <>
       <PageHero
@@ -108,7 +114,7 @@ export default function FoodPage() {
               <p className="text-slate-600 text-center max-w-xl mx-auto mb-10 reveal-up reveal-delay-1">All items available for dine-in or delivery. Go to Order Food to select items and place your order.</p>
             </AnimateInView>
             <AnimateInView>
-              <FoodGrid foods={dummyFoods} showDescription />
+              <FoodGrid foods={foods} showDescription />
             </AnimateInView>
           </div>
 

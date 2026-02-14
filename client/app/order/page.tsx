@@ -1,24 +1,25 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import PageHero from "@/components/layout/PageHero";
 import AnimateInView from "@/components/animations/AnimateInView";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { HiOutlineShoppingBag, HiOutlineLocationMarker, HiOutlinePhone, HiOutlineUser, HiOutlineClipboardList } from "react-icons/hi";
 import orderImage from "../image/order4.webp";
-import { dummyFoods, FOOD_CATEGORIES } from "@/data/foods";
+import { FOOD_CATEGORIES } from "@/data/foods";
 import type { FoodItem } from "@/data/foods";
+import { getFoodOrders, setFoodOrders, generateId, getFoods } from "@/lib/storage";
 
 const PHONE_1 = "0714147193";
 const PHONE_2 = "0716256498";
 
 const CATEGORY_ORDER: FoodItem["category"][] = ["breakfast", "main", "sides", "drinks", "desserts"];
 
-function getOrderSummary(cart: Record<string, number>) {
+function getOrderSummary(cart: Record<string, number>, foods: FoodItem[]) {
   const lines: { name: string; qty: number; price: number }[] = [];
   let total = 0;
-  dummyFoods.forEach((item) => {
+  foods.forEach((item) => {
     const qty = cart[item.id] || 0;
     if (qty > 0) {
       lines.push({ name: item.name, qty, price: item.price });
@@ -29,6 +30,7 @@ function getOrderSummary(cart: Record<string, number>) {
 }
 
 export default function OrderPage() {
+  const [foods, setFoodsState] = useState<FoodItem[]>([]);
   const [cart, setCart] = useState<Record<string, number>>({});
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -40,7 +42,11 @@ export default function OrderPage() {
   const [submitted, setSubmitted] = useState(false);
   const [submittedOrderSummary, setSubmittedOrderSummary] = useState<{ lines: { name: string; qty: number; price: number }[]; total: number } | null>(null);
 
-  const { lines: orderLines, total: orderTotal } = useMemo(() => getOrderSummary(cart), [cart]);
+  useEffect(() => {
+    setFoodsState(getFoods());
+  }, []);
+
+  const { lines: orderLines, total: orderTotal } = useMemo(() => getOrderSummary(cart, foods), [cart, foods]);
   const hasCartItems = orderLines.length > 0;
 
   const setQuantity = (id: string, qty: number) => {
@@ -54,7 +60,23 @@ export default function OrderPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmittedOrderSummary(getOrderSummary(cart));
+    const summary = getOrderSummary(cart, foods);
+    setSubmittedOrderSummary(summary);
+    const orders = getFoodOrders();
+    orders.push({
+      id: generateId(),
+      name,
+      phone,
+      address,
+      area: area || undefined,
+      landmark: landmark || undefined,
+      lines: summary.lines,
+      total: summary.total,
+      status: "pending",
+      notes: notes || orderItems || undefined,
+      createdAt: new Date().toISOString(),
+    });
+    setFoodOrders(orders);
     setSubmitted(true);
   };
 
@@ -111,7 +133,7 @@ export default function OrderPage() {
   const foodsByCategory = CATEGORY_ORDER.map((cat) => ({
     category: cat,
     label: FOOD_CATEGORIES[cat],
-    items: dummyFoods.filter((f) => f.category === cat),
+    items: foods.filter((f) => f.category === cat),
   })).filter((g) => g.items.length > 0);
 
   return (
