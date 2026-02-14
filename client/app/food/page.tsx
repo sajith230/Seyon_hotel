@@ -6,6 +6,7 @@ import PageHero from "@/components/layout/PageHero";
 import FoodGrid from "@/components/food/FoodGrid";
 import { dummyFoods } from "@/data/foods";
 import { HiOutlineFire, HiOutlineCake, HiOutlineClock, HiOutlineLocationMarker, HiOutlineTruck, HiOutlineOfficeBuilding, HiOutlineSparkles } from "react-icons/hi";
+import foodImage from "../image/food1.webp";
 
 const diningOptions = [
   { title: "Dine in", desc: "Breakfast, lunch & dinner at our restaurant. Walk in or reserve.", icon: HiOutlineLocationMarker },
@@ -26,6 +27,7 @@ export default function FoodPage() {
         title="Restaurant"
         subtitle="Fresh food and local flavours — dine in or get it delivered."
         compact
+        image={foodImage}
       />
       <section className="py-16 sm:py-20 lg:py-24 bg-[var(--background)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
