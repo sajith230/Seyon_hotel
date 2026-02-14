@@ -5,6 +5,7 @@ import Link from "next/link";
 import PageHero from "@/components/layout/PageHero";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { HiOutlineSparkles, HiOutlineCheck, HiOutlineTruck, HiOutlineOfficeBuilding, HiOutlineFire } from "react-icons/hi";
+import riverImage from "../image/ella.jpg";
 
 const whatToBring = ["Swimwear & towel", "Sunscreen", "Water shoes (optional)", "Change of clothes"];
 const exploreMore = [
@@ -20,6 +21,7 @@ export default function RiverPage() {
         title="Kirindi River"
         subtitle="Bathe in cool, clear waters — we arrange your visit."
         compact
+        image={riverImage}
       />
 
       {/* Intro */}

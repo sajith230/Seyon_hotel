@@ -11,9 +11,11 @@ interface PageHeroProps {
   className?: string;
   compact?: boolean;
   image?: StaticImageData;
+  /** "cover" fills the hero (may crop). "contain" shows the full image (no crop). */
+  imageFit?: "cover" | "contain";
 }
 
-export default function PageHero({ title, subtitle, className, compact, image }: PageHeroProps) {
+export default function PageHero({ title, subtitle, className, compact, image, imageFit = "cover" }: PageHeroProps) {
   return (
     <section
       className={cn(
@@ -24,18 +26,25 @@ export default function PageHero({ title, subtitle, className, compact, image }:
       )}
     >
       {image && (
-        <div className="absolute inset-0 z-0">
+        <div className={cn("absolute inset-0 z-0", imageFit === "contain" ? "bg-neutral-900" : "bg-black")}>
           <Image
             src={image}
             alt=""
             fill
-            className="object-cover"
+            className={imageFit === "contain" ? "object-contain" : "object-cover"}
             priority
             sizes="100vw"
           />
         </div>
       )}
-      <div className={cn("absolute inset-0 z-0", image ? "bg-black/50" : "bg-black/30")} />
+      <div
+        className={cn(
+          "absolute inset-0 z-0",
+          !image && "bg-black/30",
+          image && imageFit === "contain" && "bg-black/25",
+          image && imageFit !== "contain" && "bg-black/50"
+        )}
+      />
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full text-center">
         <h1 className="section-title text-3xl sm:text-4xl md:text-5xl font-bold">
           {title}
