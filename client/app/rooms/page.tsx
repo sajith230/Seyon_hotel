@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import PageHero from "@/components/layout/PageHero";
+import AnimateInView from "@/components/animations/AnimateInView";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { HiOutlineCloud, HiOutlineSun, HiOutlineCheck, HiOutlineSparkles, HiOutlineTruck, HiOutlineFire } from "react-icons/hi";
 import roomImage from "../image/room.jpg";
@@ -56,31 +57,31 @@ export default function RoomsPage() {
       {/* Intro */}
       <section className="py-12 sm:py-16 bg-[var(--background)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <p className="text-slate-600 leading-relaxed text-lg">
+          <AnimateInView>
+            <div className="max-w-3xl mx-auto text-center">
+              <p className="text-slate-600 leading-relaxed text-lg reveal-up">
               Whether you prefer air-conditioned comfort or naturally cool rooms, we’ve got you covered. 
               Both options include clean facilities, a warm welcome, and easy access to safari, river, and our restaurant.
-            </p>
-          </div>
+              </p>
+            </div>
+          </AnimateInView>
         </div>
       </section>
 
       {/* Room cards */}
       <section className="py-8 sm:py-12 lg:py-16 bg-[var(--section-alt)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12 lg:mb-16">
-            <h2 className="section-title text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0f172a]">
-              Rooms for Every Preference
-            </h2>
-            <p className="mt-4 text-slate-600">
-              Choose between air-conditioned comfort or naturally cool non-AC rooms. Both come with clean facilities and a warm welcome.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+          <AnimateInView>
+            <div className="text-center max-w-2xl mx-auto mb-12 lg:mb-16">
+              <h2 className="section-title text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0f172a] reveal-up">Rooms for Every Preference</h2>
+              <p className="mt-4 text-slate-600 reveal-up reveal-delay-1">Choose between air-conditioned comfort or naturally cool non-AC rooms. Both come with clean facilities and a warm welcome.</p>
+            </div>
+          </AnimateInView>
+          <AnimateInView className="grid md:grid-cols-2 gap-8 lg:gap-12 stagger-children">
             {rooms.map((room, i) => (
               <div
                 key={room.type}
-                className={`group bg-white rounded-2xl shadow-lg overflow-hidden hover-lift border border-slate-100 flex flex-col ${
+                className={`group bg-white rounded-2xl shadow-lg overflow-hidden hover-lift border border-slate-100 flex flex-col reveal-up ${
                   i % 2 === 1 ? "md:flex-col" : "md:flex-col"
                 }`}
               >
@@ -121,69 +122,67 @@ export default function RoomsPage() {
                 </div>
               </div>
             ))}
-          </div>
+          </AnimateInView>
         </div>
       </section>
 
       {/* Amenities strip */}
       <section className="py-12 sm:py-16 bg-[var(--background)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="section-title text-xl sm:text-2xl font-bold text-[#0f172a] text-center mb-8">
-            Amenities at a Glance
-          </h2>
-          <ul className="flex flex-wrap justify-center gap-3 sm:gap-4">
+          <AnimateInView>
+            <h2 className="section-title text-xl sm:text-2xl font-bold text-[#0f172a] text-center mb-8 reveal-up">Amenities at a Glance</h2>
+            <ul className="flex flex-wrap justify-center gap-3 sm:gap-4 stagger-children">
             {allAmenities.map((item) => (
               <li
                 key={item}
-                className="flex items-center gap-2 bg-white border border-slate-100 rounded-xl px-4 py-3 shadow-sm text-slate-700 font-medium"
+                className="flex items-center gap-2 bg-white border border-slate-100 rounded-xl px-4 py-3 shadow-sm text-slate-700 font-medium reveal-up"
               >
                 <HiOutlineCheck className="text-[#028EFC] shrink-0" size={20} />
                 {item}
               </li>
             ))}
           </ul>
+          </AnimateInView>
         </div>
       </section>
 
       {/* Good to know */}
       <section className="py-12 sm:py-16 bg-[var(--section-alt)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-4xl mx-auto">
-            <div className="bg-white rounded-2xl p-6 lg:p-8 border border-slate-100 shadow-sm">
+          <AnimateInView className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-4xl mx-auto stagger-children">
+            <div className="bg-white rounded-2xl p-6 lg:p-8 border border-slate-100 shadow-sm reveal-up">
               <h3 className="section-title text-lg font-bold text-[#0f172a] mb-3">Check-in & stay</h3>
               <p className="text-slate-600 text-sm leading-relaxed">
                 Check-in is flexible — just let us know your arrival time. All rooms are cleaned daily. 
                 Need extra towels or room service? Ask at reception or call us.
               </p>
             </div>
-            <div className="bg-white rounded-2xl p-6 lg:p-8 border border-slate-100 shadow-sm">
+            <div className="bg-white rounded-2xl p-6 lg:p-8 border border-slate-100 shadow-sm reveal-up">
               <h3 className="section-title text-lg font-bold text-[#0f172a] mb-3">Location</h3>
               <p className="text-slate-600 text-sm leading-relaxed">
                 We’re near Yala National Park and Kirindi River — ideal for safari and river visits. 
                 Our restaurant is on-site, and we deliver food to your room or arrange safari and river trips.
               </p>
             </div>
-          </div>
+          </AnimateInView>
         </div>
       </section>
 
       {/* Explore more */}
       <section className="py-16 sm:py-20 lg:py-24 bg-[var(--section-alt)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <h2 className="section-title text-2xl sm:text-3xl font-bold text-[#0f172a]">
-              What to Do Next
-            </h2>
-            <p className="mt-3 text-slate-600">
-              Make the most of your stay — safari, river, and great food are just a click away.
-            </p>
-          </div>
-          <div className="grid sm:grid-cols-3 gap-6">
+          <AnimateInView>
+            <div className="text-center max-w-2xl mx-auto mb-10">
+              <h2 className="section-title text-2xl sm:text-3xl font-bold text-[#0f172a] reveal-up">What to Do Next</h2>
+              <p className="mt-3 text-slate-600 reveal-up reveal-delay-1">Make the most of your stay — safari, river, and great food are just a click away.</p>
+            </div>
+          </AnimateInView>
+          <AnimateInView className="grid sm:grid-cols-3 gap-6 stagger-children">
             {exploreMore.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="group flex flex-col items-center p-8 rounded-2xl bg-white border border-slate-100 shadow-sm hover-lift text-center"
+                className="group flex flex-col items-center p-8 rounded-2xl bg-white border border-slate-100 shadow-sm hover-lift text-center reveal-up"
               >
                 <span className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#028EFC]/10 text-[#028EFC] mb-4 group-hover:bg-[#028EFC]/20 transition-colors">
                   <item.icon size={28} />
@@ -192,7 +191,7 @@ export default function RoomsPage() {
                 <span className="text-sm text-slate-500 mt-1">{item.desc}</span>
               </Link>
             ))}
-          </div>
+          </AnimateInView>
         </div>
       </section>
     </>

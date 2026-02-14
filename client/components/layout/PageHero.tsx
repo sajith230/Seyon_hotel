@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import type { StaticImageData } from "next/image";
 import { cn } from "@/lib/utils";
+import AnimateInView from "@/components/animations/AnimateInView";
 
 interface PageHeroProps {
   title: string;
@@ -46,14 +47,16 @@ export default function PageHero({ title, subtitle, className, compact, image, i
         )}
       />
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full text-center">
-        <h1 className="section-title text-3xl sm:text-4xl md:text-5xl font-bold">
-          {title}
-        </h1>
-        {subtitle && (
-          <p className="mt-3 max-w-2xl mx-auto text-slate-200 text-lg">
-            {subtitle}
-          </p>
-        )}
+        <AnimateInView rootMargin="0px" threshold={0.2} className="w-full">
+          <h1 className="section-title text-3xl sm:text-4xl md:text-5xl font-bold reveal-up">
+            {title}
+          </h1>
+          {subtitle && (
+            <p className="mt-3 max-w-2xl mx-auto text-slate-200 text-lg reveal-up reveal-delay-1">
+              {subtitle}
+            </p>
+          )}
+        </AnimateInView>
       </div>
     </section>
   );
