@@ -55,11 +55,13 @@ export default function RiverPage() {
                 <li className="flex items-center gap-2"><HiOutlineCheck className="text-[#0d9488] shrink-0" size={20} /> Combine with a safari or rest day</li>
               </ul>
               <div className="mt-8">
-                <PrimaryButton
-                  identifier="river-cta"
-                  buttonText="Arrange River Visit"
-                  className="min-w-[200px]"
-                />
+                <Link href="/river/book">
+                  <PrimaryButton
+                    identifier="river-cta"
+                    buttonText="Arrange River Visit"
+                    className="min-w-[200px]"
+                  />
+                </Link>
               </div>
             </div>
             <div className="relative reveal-up reveal-delay-1">

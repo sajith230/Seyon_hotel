@@ -1,13 +1,36 @@
-# Deploy to Vercel
+# Fix 404 on Vercel — Deploy from `client` folder
 
-1. Push your code to GitHub/GitLab/Bitbucket.
+**Why you see 404:** The repo root is `Seyon_hotel`, but the Next.js app lives in **`client`**. If Vercel builds from the repo root, it doesn’t find the app and every request returns **404 NOT_FOUND**.
 
-2. In [Vercel](https://vercel.com), **Import** the repository.
+**Fix: set Root Directory to `client` in Vercel.**
 
-3. **Important:** Set **Root Directory** to `client`.
-   - Project Settings → General → Root Directory → set to `client` (or `./client`).
-   - Leave **Build Command** as `npm run build` and **Output Directory** as default.
+---
 
-4. Deploy. The build runs from the `client` folder and should succeed.
+## Steps (do this once per project)
 
-If your repo root is already `client` (no parent folder), you can leave Root Directory blank.
+1. Open your project on [vercel.com](https://vercel.com) → **Project** → **Settings**.
+
+2. Go to **General**.
+
+3. Find **Root Directory**:
+   - Click **Edit** next to "Root Directory".
+   - Enter: **`client`** (only this folder name, no slash at the start).
+   - Save.
+
+4. **Redeploy:**
+   - Go to the **Deployments** tab.
+   - Open the **⋯** menu on the latest deployment → **Redeploy** (or push a new commit).
+
+After the new deployment, the site should load instead of 404.
+
+---
+
+## Checklist
+
+- [ ] Root Directory = **`client`**
+- [ ] Redeploy after changing it
+- [ ] Build Command: leave default (`npm run build`) or empty
+- [ ] Output Directory: leave default (Vercel detects Next.js)
+- [ ] Framework Preset: **Next.js** (auto-detected when root is `client`)
+
+If 404 persists, in the deployment **Build Logs** confirm that the build runs inside `client` (e.g. you see "Running next build" and no "no such file" errors).

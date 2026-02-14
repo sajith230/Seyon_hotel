@@ -67,11 +67,13 @@ export default function SafariPage() {
                 <li className="flex items-center gap-2"><HiOutlineCheck className="text-[#028EFC] shrink-0" size={20} /> Park entry support when needed</li>
               </ul>
               <div className="mt-8">
-                <PrimaryButton
-                  identifier="safari-cta"
-                  buttonText="Book Safari Cab"
-                  className="min-w-[200px]"
-                />
+                <Link href="/safari/book">
+                  <PrimaryButton
+                    identifier="safari-cta"
+                    buttonText="Book Safari Cab"
+                    className="min-w-[200px]"
+                  />
+                </Link>
               </div>
             </div>
           </AnimateInView>

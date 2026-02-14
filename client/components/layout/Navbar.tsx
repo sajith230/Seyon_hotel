@@ -20,6 +20,9 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
+  // Don't show main site navbar on admin pages
+  if (pathname?.startsWith("/admin")) return null;
+
   // At top of any page (over dark hero), use light text so navbar is visible on all pages
   const isOverHero = !scrolled;
 

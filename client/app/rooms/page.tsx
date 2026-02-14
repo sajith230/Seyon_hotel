@@ -1,33 +1,21 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import PageHero from "@/components/layout/PageHero";
 import AnimateInView from "@/components/animations/AnimateInView";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { HiOutlineCloud, HiOutlineSun, HiOutlineCheck, HiOutlineSparkles, HiOutlineTruck, HiOutlineFire } from "react-icons/hi";
 import roomImage from "../image/room.jpg";
+import { getRooms } from "@/lib/storage";
+import type { RoomItem } from "@/lib/storage";
 
-const rooms = [
-  {
-    type: "AC Room",
-    description: "Cool, comfortable rooms with air conditioning. Perfect for a restful stay after a day of safari or river fun.",
-    icon: HiOutlineCloud,
-    features: ["King/ Twin beds", "Private bathroom", "AC", "Wi-Fi"],
-    cta: "Book AC Room",
-    gradient: "from-[#0d9488] via-[#0f766e] to-[#0f172a]",
-    tagline: "Cool comfort",
-  },
-  {
-    type: "Non-AC Room",
-    description: "Spacious, naturally ventilated rooms with ceiling fans. Ideal for guests who prefer a breezy, eco-friendly stay.",
-    icon: HiOutlineSun,
-    features: ["Comfortable beds", "Private bathroom", "Ceiling fan", "Wi-Fi"],
-    cta: "Book Non-AC Room",
-    gradient: "from-[#1e293b] via-[#334155] to-[#0f172a]",
-    tagline: "Natural breeze",
-  },
-];
+function getRoomStyle(item: RoomItem) {
+  if (item.type === "ac") {
+    return { icon: HiOutlineCloud, gradient: "from-[#0d9488] via-[#0f766e] to-[#0f172a]" as const };
+  }
+  return { icon: HiOutlineSun, gradient: "from-[#1e293b] via-[#334155] to-[#0f172a]" as const };
+}
 
 const allAmenities = [
   "Private bathroom",
@@ -45,6 +33,9 @@ const exploreMore = [
 ];
 
 export default function RoomsPage() {
+  const [rooms, setRooms] = useState<RoomItem[]>([]);
+  useEffect(() => setRooms(getRooms()), []);
+
   return (
     <>
       <PageHero
@@ -78,50 +69,73 @@ export default function RoomsPage() {
             </div>
           </AnimateInView>
           <AnimateInView className="grid md:grid-cols-2 gap-8 lg:gap-12 stagger-children">
-            {rooms.map((room, i) => (
-              <div
-                key={room.type}
-                className={`group bg-white rounded-2xl shadow-lg overflow-hidden hover-lift border border-slate-100 flex flex-col reveal-up ${
-                  i % 2 === 1 ? "md:flex-col" : "md:flex-col"
-                }`}
-              >
-                {/* Visual block */}
-                <div className={`h-40 sm:h-48 flex-shrink-0 bg-gradient-to-br ${room.gradient} flex items-center justify-center relative overflow-hidden`}>
-                  <div className="absolute inset-0 opacity-20" style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.3' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 20V40H20L40 20z'/%3E%3C/g%3E%3C/svg%3E")`,
-                  }} />
-                  <span className="relative z-10 flex items-center justify-center w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-sm text-white">
-                    <room.icon size={40} />
-                  </span>
-                  <span className="absolute bottom-3 right-4 text-white/80 text-sm font-medium">{room.tagline}</span>
-                </div>
-                <div className="p-8 sm:p-10 flex flex-col flex-1">
-                  <h3 className="section-title text-2xl font-bold text-[#0f172a]">
-                    {room.type}
-                  </h3>
-                  <p className="mt-3 text-slate-600 leading-relaxed flex-1">
-                    {room.description}
-                  </p>
-                  <ul className="mt-4 flex flex-wrap gap-2">
-                    {room.features.map((f) => (
-                      <li
-                        key={f}
-                        className="text-sm bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full"
-                      >
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-6">
-                    <PrimaryButton
-                      identifier={`room-${i}`}
-                      buttonText={room.cta}
-                      className="min-w-[180px]"
-                    />
+            {rooms.length === 0 ? (
+              <p className="col-span-full text-center text-slate-500 py-12">No rooms listed yet. Check back soon.</p>
+            ) : rooms.map((room) => {
+              const { icon: RoomIcon, gradient } = getRoomStyle(room);
+              return (
+                <div
+                  key={room.id}
+                  className="group bg-white rounded-2xl shadow-lg overflow-hidden hover-lift border border-slate-100 flex flex-col reveal-up"
+                >
+                  {/* Visual block */}
+                  <div className={`h-40 sm:h-48 flex-shrink-0 bg-gradient-to-br ${gradient} flex items-center justify-center relative overflow-hidden`}>
+                    {room.image ? (
+                      <>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={room.image}
+                          alt={room.name}
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/40" />
+                      </>
+                    ) : (
+                      <>
+                        <div className="absolute inset-0 opacity-20" style={{
+                          backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.3' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 20V40H20L40 20z'/%3E%3C/g%3E%3C/svg%3E")`,
+                        }} />
+                      </>
+                    )}
+                    <span className="relative z-10 flex items-center justify-center w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-sm text-white">
+                      <RoomIcon size={40} />
+                    </span>
+                    {(room.tagline || room.name) && (
+                      <span className="absolute bottom-3 right-4 text-white/90 text-sm font-medium drop-shadow">
+                        {room.tagline || room.name}
+                      </span>
+                    )}
+                  </div>
+                  <div className="p-8 sm:p-10 flex flex-col flex-1">
+                    <h3 className="section-title text-2xl font-bold text-[#0f172a]">
+                      {room.name}
+                    </h3>
+                    <p className="mt-3 text-slate-600 leading-relaxed flex-1">
+                      {room.description || "Comfortable room for your stay."}
+                    </p>
+                    {room.features.length > 0 && (
+                      <ul className="mt-4 flex flex-wrap gap-2">
+                        {room.features.map((f) => (
+                          <li
+                            key={f}
+                            className="text-sm bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full"
+                          >
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    <div className="mt-6">
+                      <PrimaryButton
+                        identifier={`room-${room.id}`}
+                        buttonText={`Book ${room.name}`}
+                        className="min-w-[180px]"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </AnimateInView>
         </div>
       </section>
