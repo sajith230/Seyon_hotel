@@ -52,6 +52,32 @@ export default function OrderPage() {
         subtitle="We deliver to your room or address. Enter your details below."
         compact
       />
+      {/* How it works */}
+      <section className="py-10 sm:py-12 bg-[var(--section-alt)]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="section-title text-xl sm:text-2xl font-bold text-[#0f172a] text-center mb-8">
+            How It Works
+          </h2>
+          <div className="grid sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
+            <div className="text-center">
+              <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[#028EFC] text-white font-bold text-lg">1</span>
+              <p className="mt-3 text-slate-700 font-medium">Choose from our menu</p>
+              <p className="mt-1 text-slate-500 text-sm">See the full menu on our <Link href="/food" className="text-[#028EFC] hover:underline">Restaurant</Link> page.</p>
+            </div>
+            <div className="text-center">
+              <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[#028EFC] text-white font-bold text-lg">2</span>
+              <p className="mt-3 text-slate-700 font-medium">Enter delivery details</p>
+              <p className="mt-1 text-slate-500 text-sm">Room number, address, or landmark.</p>
+            </div>
+            <div className="text-center">
+              <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[#028EFC] text-white font-bold text-lg">3</span>
+              <p className="mt-3 text-slate-700 font-medium">We confirm & deliver</p>
+              <p className="mt-1 text-slate-500 text-sm">We’ll call to confirm and bring your order.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-12 sm:py-16 lg:py-20 bg-[var(--background)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-5 gap-10 lg:gap-12">
@@ -163,8 +189,8 @@ export default function OrderPage() {
               </div>
             </div>
 
-            {/* Help / contact - no menu here; customer already chose on Food page */}
-            <div className="lg:col-span-2">
+            {/* Help / contact */}
+            <div className="lg:col-span-2 space-y-6">
               <div className="bg-[var(--section-alt)] rounded-2xl p-6 sm:p-8 border border-slate-100 sticky top-24">
                 <h3 className="section-title text-lg font-bold text-[#0f172a] mb-2">Need help?</h3>
                 <p className="text-slate-600 text-sm leading-relaxed">
@@ -173,6 +199,13 @@ export default function OrderPage() {
                 <p className="mt-4 text-slate-600 text-sm">
                   Call us:{" "}
                   <a href="tel:+94112345678" className="text-[#028EFC] font-medium">+94 11 234 5678</a>
+                </p>
+              </div>
+              <div className="bg-white rounded-2xl p-6 border border-slate-100">
+                <h3 className="font-bold text-[#0f172a] mb-2">Delivery areas & timing</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  We deliver to rooms at Sayone and to nearby addresses. Typical delivery time is 30–45 minutes depending on your order. 
+                  For large orders or special requests, call us to confirm.
                 </p>
               </div>
             </div>

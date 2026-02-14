@@ -1,9 +1,17 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import PageHero from "@/components/layout/PageHero";
 import PrimaryButton from "@/components/ui/PrimaryButton";
-import { HiOutlineSparkles } from "react-icons/hi";
+import { HiOutlineSparkles, HiOutlineCheck, HiOutlineTruck, HiOutlineOfficeBuilding, HiOutlineFire } from "react-icons/hi";
+
+const whatToBring = ["Swimwear & towel", "Sunscreen", "Water shoes (optional)", "Change of clothes"];
+const exploreMore = [
+  { href: "/safari", label: "Safari Yala", icon: HiOutlineTruck },
+  { href: "/rooms", label: "Rooms", icon: HiOutlineOfficeBuilding },
+  { href: "/food", label: "Restaurant", icon: HiOutlineFire },
+];
 
 export default function RiverPage() {
   return (
@@ -13,7 +21,18 @@ export default function RiverPage() {
         subtitle="Bathe in cool, clear waters — we arrange your visit."
         compact
       />
-      <section className="py-16 sm:py-20 lg:py-24 bg-[var(--background)]">
+
+      {/* Intro */}
+      <section className="py-10 sm:py-12 bg-[var(--background)]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p className="max-w-3xl mx-auto text-center text-slate-600 leading-relaxed text-lg">
+            Kirindi River is a peaceful spot near Yala where you can cool off in clear water, listen to birds, and enjoy the shade of the trees. 
+            We help you get there safely and can combine it with a safari or a relaxed day at the hotel.
+          </p>
+        </div>
+      </section>
+
+      <section className="py-8 sm:py-12 lg:py-16 bg-[var(--section-alt)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div>
@@ -23,12 +42,11 @@ export default function RiverPage() {
               <p className="mt-4 text-slate-600 leading-relaxed">
                 Take a refreshing dip in the Kirindi River. We can arrange your visit—cool, clear waters and the sounds of nature make it an unforgettable experience right from your stay at Sayone.
               </p>
-              <div className="mt-8 flex items-center gap-4">
-                <HiOutlineSparkles className="text-[#0d9488] shrink-0" size={32} />
-                <span className="text-slate-600">
-                  Safe, guided access to the river when you book with us.
-                </span>
-              </div>
+              <ul className="mt-6 space-y-2 text-slate-600">
+                <li className="flex items-center gap-2"><HiOutlineCheck className="text-[#0d9488] shrink-0" size={20} /> Safe, guided access when you book with us</li>
+                <li className="flex items-center gap-2"><HiOutlineCheck className="text-[#0d9488] shrink-0" size={20} /> Ideal for families and small groups</li>
+                <li className="flex items-center gap-2"><HiOutlineCheck className="text-[#0d9488] shrink-0" size={20} /> Combine with a safari or rest day</li>
+              </ul>
               <div className="mt-8">
                 <PrimaryButton
                   identifier="river-cta"
@@ -38,12 +56,60 @@ export default function RiverPage() {
               </div>
             </div>
             <div className="relative">
-              <div className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-[#0d9488]/80 to-[#0f172a]/80 flex items-center justify-center">
-                <span className="section-title text-5xl sm:text-6xl font-bold text-white/30">
-                  Kirindi
-                </span>
+              <div className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-[#0d9488]/80 to-[#0f172a]/80 flex items-center justify-center relative overflow-hidden">
+                <div className="absolute inset-0 opacity-20" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff' fill-opacity='0.2'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z'/%3E%3C/g%3E%3C/svg%3E")` }} />
+                <HiOutlineSparkles size={80} className="text-white/30 relative z-10" />
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What to bring & good to know */}
+      <section className="py-12 sm:py-16 bg-[var(--background)]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-10 lg:gap-12">
+            <div className="bg-white rounded-2xl p-6 lg:p-8 border border-slate-100 shadow-sm">
+              <h3 className="section-title text-xl font-bold text-[#0f172a] mb-4">What to Bring</h3>
+              <ul className="space-y-2 text-slate-600">
+                {whatToBring.map((item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#0d9488]" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="bg-white rounded-2xl p-6 lg:p-8 border border-slate-100 shadow-sm">
+              <h3 className="section-title text-xl font-bold text-[#0f172a] mb-4">Good to Know</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                River conditions can vary with the season. We’ll advise on the best time to visit and any safety tips. 
+                Perfect for a half-day trip — pair it with lunch at our restaurant or a relaxed afternoon at the hotel.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Explore more */}
+      <section className="py-12 sm:py-16 bg-[var(--section-alt)]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="section-title text-xl sm:text-2xl font-bold text-[#0f172a] text-center mb-8">
+            Explore More
+          </h2>
+          <div className="grid sm:grid-cols-3 gap-6">
+            {exploreMore.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="flex items-center gap-4 p-4 rounded-xl bg-white border border-slate-100 shadow-sm hover-lift"
+              >
+                <span className="flex items-center justify-center w-12 h-12 rounded-xl bg-[#0d9488]/10 text-[#0d9488] shrink-0">
+                  <item.icon size={24} />
+                </span>
+                <span className="font-semibold text-[#0f172a]">{item.label}</span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
