@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import PageHero from "@/components/layout/PageHero";
 import PrimaryButton from "@/components/ui/PrimaryButton";
-import { setRiverBookings, getRiverBookings, generateId } from "@/lib/storage";
+import { getRiverBookings, setRiverBookings, generateId } from "@/lib/storage";
 import { HiOutlineCheck } from "react-icons/hi";
 import riverImage from "../../image/ella.jpg";
 
@@ -15,21 +15,31 @@ export default function RiverBookPage() {
   const [guests, setGuests] = useState(2);
   const [notes, setNotes] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const list = getRiverBookings();
-    list.push({
-      id: generateId(),
-      name,
-      phone,
-      date,
-      guests,
-      notes: notes || undefined,
-      createdAt: new Date().toISOString(),
-    });
-    setRiverBookings(list);
-    setSubmitted(true);
+    setSubmitting(true);
+    setError(null);
+    try {
+      const list = getRiverBookings();
+      list.push({
+        id: generateId(),
+        name: name.trim(),
+        phone: phone.trim(),
+        date,
+        guests,
+        notes: notes.trim() || undefined,
+        createdAt: new Date().toISOString(),
+      });
+      setRiverBookings(list);
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to submit request");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -67,6 +77,11 @@ export default function RiverBookPage() {
       <section className="py-12 sm:py-16 bg-[var(--background)]">
         <div className="mx-auto max-w-xl px-4 sm:px-6">
           <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 sm:p-8 space-y-5">
+            {error && (
+              <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+                {error}
+              </div>
+            )}
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">Your name <span className="text-red-500">*</span></label>
               <input
@@ -127,7 +142,7 @@ export default function RiverBookPage() {
               />
             </div>
             <div className="pt-2 flex flex-col sm:flex-row gap-3">
-              <PrimaryButton type="submit" identifier="river-submit" buttonText="Submit request" className="min-w-[200px]" />
+              <PrimaryButton type="submit" identifier="river-submit" buttonText={submitting ? "Submitting…" : "Submit request"} className="min-w-[200px]" disabled={submitting} />
               <Link href="/river" className="sm:ml-2 text-slate-600 hover:text-[#028EFC] font-medium py-3">
                 Cancel
               </Link>

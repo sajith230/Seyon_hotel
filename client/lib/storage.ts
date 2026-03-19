@@ -10,6 +10,7 @@ export const STORAGE_KEYS = {
   FOOD_ORDERS: "sayone_food_orders",
   SAFARI_BOOKINGS: "sayone_safari_bookings",
   RIVER_BOOKINGS: "sayone_river_bookings",
+  ROOM_BOOKINGS: "sayone_room_bookings",
   FOODS: "sayone_foods",
   ROOMS: "sayone_rooms",
 } as const;
@@ -64,6 +65,21 @@ export interface RoomItem {
   tagline?: string;
 }
 
+export interface RoomBooking {
+  id: string;
+  roomId: string;
+  roomName: string;
+  name: string;
+  phone: string;
+  email?: string;
+  checkIn: string;
+  checkOut: string;
+  guests: number;
+  notes?: string;
+  status: "pending" | "confirmed" | "cancelled";
+  createdAt: string;
+}
+
 function safeJsonParse<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
   try {
@@ -103,6 +119,14 @@ export function getRiverBookings(): RiverBooking[] {
 
 export function setRiverBookings(bookings: RiverBooking[]) {
   safeJsonSet(STORAGE_KEYS.RIVER_BOOKINGS, bookings);
+}
+
+export function getRoomBookings(): RoomBooking[] {
+  return safeJsonParse(STORAGE_KEYS.ROOM_BOOKINGS, []);
+}
+
+export function setRoomBookings(bookings: RoomBooking[]) {
+  safeJsonSet(STORAGE_KEYS.ROOM_BOOKINGS, bookings);
 }
 
 export function generateId(): string {

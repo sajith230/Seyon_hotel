@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import PageHero from "@/components/layout/PageHero";
 import PrimaryButton from "@/components/ui/PrimaryButton";
-import { setSafariBookings, getSafariBookings, generateId } from "@/lib/storage";
+import { getSafariBookings, setSafariBookings, generateId } from "@/lib/storage";
 import { HiOutlineCheck } from "react-icons/hi";
 import yalaImage from "../../image/yala.jpg";
 
@@ -17,23 +17,33 @@ export default function SafariBookPage() {
   const [guests, setGuests] = useState(2);
   const [notes, setNotes] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const list = getSafariBookings();
-    list.push({
-      id: generateId(),
-      name,
-      phone,
-      email: email || undefined,
-      date,
-      time,
-      guests,
-      notes: notes || undefined,
-      createdAt: new Date().toISOString(),
-    });
-    setSafariBookings(list);
-    setSubmitted(true);
+    setSubmitting(true);
+    setError(null);
+    try {
+      const list = getSafariBookings();
+      list.push({
+        id: generateId(),
+        name: name.trim(),
+        phone: phone.trim(),
+        email: email.trim() || undefined,
+        date,
+        time,
+        guests,
+        notes: notes.trim() || undefined,
+        createdAt: new Date().toISOString(),
+      });
+      setSafariBookings(list);
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to submit booking");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -71,6 +81,11 @@ export default function SafariBookPage() {
       <section className="py-12 sm:py-16 bg-[var(--background)]">
         <div className="mx-auto max-w-xl px-4 sm:px-6">
           <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 sm:p-8 space-y-5">
+            {error && (
+              <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+                {error}
+              </div>
+            )}
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">Your name *</label>
               <input id="name" type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. John" className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-[#028EFC] focus:ring-2 focus:ring-[#028EFC]/20 outline-none" />
@@ -109,7 +124,7 @@ export default function SafariBookPage() {
               <textarea id="notes" rows={3} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Half-day / full-day, pick-up location, etc." className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-[#028EFC] focus:ring-2 focus:ring-[#028EFC]/20 outline-none resize-none" />
             </div>
             <div className="pt-2 flex flex-col sm:flex-row gap-3">
-              <PrimaryButton type="submit" identifier="safari-submit" buttonText="Submit booking" className="min-w-[200px]" />
+              <PrimaryButton type="submit" identifier="safari-submit" buttonText={submitting ? "Submitting…" : "Submit booking"} className="min-w-[200px]" disabled={submitting} />
               <Link href="/safari" className="sm:ml-2 text-slate-600 hover:text-[#028EFC] font-medium py-3">Cancel</Link>
             </div>
           </form>

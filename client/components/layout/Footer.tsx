@@ -12,6 +12,7 @@ const footerLinks = {
     { href: "/safari", label: "Safari Yala" },
     { href: "/river", label: "Kirindi River" },
     { href: "/order", label: "Order Food" },
+    { href: "/contact", label: "Contact Us" },
   ],
 };
 
@@ -81,14 +82,14 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <HiPhone className="shrink-0 text-[#028EFC]" size={18} />
-                <a href="tel:+94112345678" className="hover:text-[#028EFC] transition-colors">
-                  +94 11 234 5678
+                <a href="tel:0714147193" className="hover:text-[#028EFC] transition-colors">
+                  071 414 7193
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <HiMail className="shrink-0 text-[#028EFC]" size={18} />
-                <a href="mailto:hello@sayone.lk" className="hover:text-[#028EFC] transition-colors">
-                  hello@sayone.lk
+                <a href="mailto:Surath028@gmail.com" className="hover:text-[#028EFC] transition-colors">
+                  Surath028@gmail.com
                 </a>
               </li>
             </ul>

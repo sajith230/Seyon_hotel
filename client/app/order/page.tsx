@@ -9,7 +9,7 @@ import { HiOutlineShoppingBag, HiOutlineLocationMarker, HiOutlinePhone, HiOutlin
 import orderImage from "../image/order4.webp";
 import { FOOD_CATEGORIES } from "@/data/foods";
 import type { FoodItem } from "@/data/foods";
-import { getFoodOrders, setFoodOrders, generateId, getFoods } from "@/lib/storage";
+import { getFoods, getFoodOrders, setFoodOrders, generateId } from "@/lib/storage";
 
 const PHONE_1 = "0714147193";
 const PHONE_2 = "0716256498";
@@ -31,6 +31,7 @@ function getOrderSummary(cart: Record<string, number>, foods: FoodItem[]) {
 
 export default function OrderPage() {
   const [foods, setFoodsState] = useState<FoodItem[]>([]);
+  const [foodsLoading, setFoodsLoading] = useState(true);
   const [cart, setCart] = useState<Record<string, number>>({});
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -40,10 +41,13 @@ export default function OrderPage() {
   const [orderItems, setOrderItems] = useState("");
   const [notes, setNotes] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [submittedOrderSummary, setSubmittedOrderSummary] = useState<{ lines: { name: string; qty: number; price: number }[]; total: number } | null>(null);
 
   useEffect(() => {
     setFoodsState(getFoods());
+    setFoodsLoading(false);
   }, []);
 
   const { lines: orderLines, total: orderTotal } = useMemo(() => getOrderSummary(cart, foods), [cart, foods]);
@@ -58,26 +62,34 @@ export default function OrderPage() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const summary = getOrderSummary(cart, foods);
     setSubmittedOrderSummary(summary);
-    const orders = getFoodOrders();
-    orders.push({
-      id: generateId(),
-      name,
-      phone,
-      address,
-      area: area || undefined,
-      landmark: landmark || undefined,
-      lines: summary.lines,
-      total: summary.total,
-      status: "pending",
-      notes: notes || orderItems || undefined,
-      createdAt: new Date().toISOString(),
-    });
-    setFoodOrders(orders);
-    setSubmitted(true);
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      const orders = getFoodOrders();
+      orders.push({
+        id: generateId(),
+        name: name.trim(),
+        phone: phone.trim(),
+        address: address.trim(),
+        area: area.trim() || undefined,
+        landmark: landmark.trim() || undefined,
+        lines: summary.lines,
+        total: summary.total,
+        status: "pending",
+        notes: (notes || orderItems || "").trim() || undefined,
+        createdAt: new Date().toISOString(),
+      });
+      setFoodOrders(orders);
+      setSubmitted(true);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Failed to place order");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -173,7 +185,10 @@ export default function OrderPage() {
                   <p className="text-sm text-slate-500 mt-1">Choose quantity for each item. You can add more in the notes below.</p>
                 </div>
                 <div className="p-6 sm:p-8">
-                  {foodsByCategory.map(({ category, label, items }) => (
+                  {foodsLoading ? (
+                    <p className="text-slate-500 text-center py-8">Loading menu…</p>
+                  ) : (
+                    foodsByCategory.map(({ category, label, items }) => (
                     <div key={category} className="mb-8 last:mb-0">
                       <h3 className="section-title text-lg font-bold text-[#0f172a] mb-4">{label}</h3>
                       <ul className="space-y-3">
@@ -203,11 +218,12 @@ export default function OrderPage() {
                                 +
                               </button>
                             </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))
+                  )}
                 </div>
               </div>
 
@@ -221,6 +237,11 @@ export default function OrderPage() {
                   <p className="text-sm text-slate-500 mt-1">Where should we deliver your order?</p>
                 </div>
                 <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-5">
+                  {submitError && (
+                    <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+                      {submitError}
+                    </div>
+                  )}
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">Your name <span className="text-red-500">*</span></label>
                     <div className="relative">
@@ -309,9 +330,10 @@ export default function OrderPage() {
                   </div>
                   <PrimaryButton
                     identifier="order-submit"
-                    buttonText={hasCartItems ? "Place order — we'll call to confirm" : "Place order (add items above or in notes)"}
+                    buttonText={submitting ? "Placing order…" : hasCartItems ? "Place order — we'll call to confirm" : "Place order (add items above or in notes)"}
                     type="submit"
                     className="w-full py-4 text-base"
+                    disabled={submitting}
                   />
                 </form>
               </div>
