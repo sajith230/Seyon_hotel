@@ -13,6 +13,10 @@ import safariImage from "./image/yala.jpg";
 import riverImage from "./image/kiridi2.jpg";
 import photo1 from "./image/1.jpeg";
 import photo2 from "./image/2.jpeg";
+import photo4 from "./image/4.jpeg";
+import photo5 from "./image/5.jpeg";
+import photo6 from "./image/6.jpeg";
+import photo7 from "./image/7.jpeg";
 
 const quickLinks = [
   { href: "/rooms", label: "Rooms", desc: "AC & Non-AC", icon: HiOutlineOfficeBuilding, image: roomImage },
@@ -45,6 +49,10 @@ const dayAtSayone = [
 const homePhotos = [
   { src: photo1, alt: "Sayone photo 1" },
   { src: photo2, alt: "Sayone photo 2" },
+  { src: photo4, alt: "Sayone photo 4" },
+  { src: photo5, alt: "Sayone photo 5" },
+  { src: photo6, alt: "Sayone photo 6" },
+  { src: photo7, alt: "Sayone photo 7" },
 ];
 
 export default function Home() {
@@ -155,7 +163,7 @@ export default function Home() {
             </div>
           </AnimateInView>
 
-          <AnimateInView className="grid md:grid-cols-2 gap-6 lg:gap-8 stagger-children">
+          <AnimateInView className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 stagger-children">
             {homePhotos.map((p) => (
               <div
                 key={p.alt}
