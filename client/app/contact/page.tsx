@@ -44,7 +44,7 @@ export default function ContactPage() {
                   <HiLocationMarker className="mt-0.5 shrink-0 text-[#028EFC]" size={20} />
                   <div>
                     <p className="font-semibold text-[#0f172a]">Address</p>
-                    <p className="text-slate-600">Near Yala, Sri Lanka</p>
+                    <p className="text-slate-600">Wellawaya Road, Thanamalwila</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
