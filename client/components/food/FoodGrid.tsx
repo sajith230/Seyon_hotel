@@ -12,6 +12,10 @@ interface FoodGridProps {
   showDescription?: boolean;
   /** Use "list" for sidebar / compact layout (single column). */
   layout?: "grid" | "list";
+  /** Group by category headings; set false for one flat grid. */
+  grouped?: boolean;
+  /** Grid cards show only image (used for food gallery style). */
+  imageOnly?: boolean;
   /** Show image + Order button on each card (grid only). */
   showOrderButton?: boolean;
   className?: string;
@@ -21,6 +25,8 @@ export default function FoodGrid({
   foods,
   showDescription = true,
   layout = "grid",
+  grouped = true,
+  imageOnly = false,
   showOrderButton = false,
   className,
 }: FoodGridProps) {
@@ -35,7 +41,74 @@ export default function FoodGrid({
 
   return (
     <div className={cn("space-y-10", className)}>
-      {order.map(
+      {!grouped ? (
+        <div
+          className={
+            layout === "list"
+              ? "space-y-2"
+              : "grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          }
+        >
+          {foods.map((item) => (
+            <div
+              key={item.id}
+              className={cn(
+                layout === "grid"
+                  ? "bg-white rounded-xl border border-slate-100 overflow-hidden hover-lift flex flex-col"
+                  : "flex justify-between items-center gap-2 py-2 border-b border-slate-100 last:border-0"
+              )}
+            >
+              {layout === "grid" && (
+                <>
+                  <div className="aspect-[4/3] bg-slate-100 relative overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full h-full object-cover"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  </div>
+                  {!imageOnly && (
+                    <div className="p-4 sm:p-5 flex flex-col flex-1">
+                      <div className="flex justify-between items-start gap-2">
+                        <h4 className="font-semibold text-[#0f172a]">{item.name}</h4>
+                        <span className="text-[#028EFC] font-semibold shrink-0">
+                          LKR {item.price}
+                        </span>
+                      </div>
+                      {showDescription && (
+                        <p className="mt-2 text-sm text-slate-600 line-clamp-2">
+                          {item.description}
+                        </p>
+                      )}
+                      {showOrderButton && (
+                        <div className="mt-4">
+                          <PrimaryButton
+                            identifier={`order-${item.id}`}
+                            buttonText="Order"
+                            className="w-full mt-auto"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
+              {layout === "list" && (
+                <>
+                  <div className="min-w-0">
+                    <h4 className="font-semibold text-[#0f172a]">{item.name}</h4>
+                  </div>
+                  <span className="text-[#028EFC] font-semibold shrink-0">
+                    LKR {item.price}
+                  </span>
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
+      order.map(
         (cat) =>
           byCategory[cat]?.length > 0 && (
             <div key={cat}>
@@ -68,28 +141,30 @@ export default function FoodGrid({
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                           />
                         </div>
-                        <div className="p-4 sm:p-5 flex flex-col flex-1">
-                          <div className="flex justify-between items-start gap-2">
-                            <h4 className="font-semibold text-[#0f172a]">{item.name}</h4>
-                            <span className="text-[#028EFC] font-semibold shrink-0">
-                              LKR {item.price}
-                            </span>
-                          </div>
-                          {showDescription && (
-                            <p className="mt-2 text-sm text-slate-600 line-clamp-2">
-                              {item.description}
-                            </p>
-                          )}
-                          {showOrderButton && (
-                            <div className="mt-4">
-                              <PrimaryButton
-                                identifier={`order-${item.id}`}
-                                buttonText="Order"
-                                className="w-full mt-auto"
-                              />
+                        {!imageOnly && (
+                          <div className="p-4 sm:p-5 flex flex-col flex-1">
+                            <div className="flex justify-between items-start gap-2">
+                              <h4 className="font-semibold text-[#0f172a]">{item.name}</h4>
+                              <span className="text-[#028EFC] font-semibold shrink-0">
+                                LKR {item.price}
+                              </span>
                             </div>
-                          )}
-                        </div>
+                            {showDescription && (
+                              <p className="mt-2 text-sm text-slate-600 line-clamp-2">
+                                {item.description}
+                              </p>
+                            )}
+                            {showOrderButton && (
+                              <div className="mt-4">
+                                <PrimaryButton
+                                  identifier={`order-${item.id}`}
+                                  buttonText="Order"
+                                  className="w-full mt-auto"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </>
                     )}
                     {layout === "list" && (
@@ -107,6 +182,7 @@ export default function FoodGrid({
               </div>
             </div>
           )
+      )
       )}
     </div>
   );

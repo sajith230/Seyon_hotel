@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import PageHero from "@/components/layout/PageHero";
 import AnimateInView from "@/components/animations/AnimateInView";
-import FoodGrid from "@/components/food/FoodGrid";
-import type { FoodItem } from "@/data/foods";
-import { getFoods } from "@/lib/storage";
 import { HiOutlineFire, HiOutlineCake, HiOutlineClock, HiOutlineLocationMarker, HiOutlineTruck, HiOutlineOfficeBuilding, HiOutlineSparkles } from "react-icons/hi";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import Image from "next/image";
-import foodImage from "../image/food1.webp";
-import food2Image from "../image/food2.webp";
+import food8 from "../image/8.jpg";
+import food9 from "../image/9.jpg";
+import food10 from "../image/10.jpg";
+import food11 from "../image/11.png";
+import food12 from "../image/12.jpg";
 
 const diningOptions = [
   { title: "Dine in", desc: "Breakfast, lunch & dinner at our restaurant. Walk in or reserve.", icon: HiOutlineLocationMarker },
@@ -26,10 +26,7 @@ const exploreMore = [
 ];
 
 export default function FoodPage() {
-  const [foods, setFoods] = useState<FoodItem[]>([]);
-  useEffect(() => {
-    setFoods(getFoods());
-  }, []);
+  const gallery = [food8, food9, food10, food12];
 
   return (
     <>
@@ -37,7 +34,7 @@ export default function FoodPage() {
         title="Restaurant"
         subtitle="Fresh food and local flavours — dine in or get it delivered."
         compact
-        image={foodImage}
+        image={food11}
       />
       <section className="py-16 sm:py-20 lg:py-24 bg-[var(--background)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -70,10 +67,10 @@ export default function FoodPage() {
             <div className="relative reveal-up reveal-delay-1">
               <div className="aspect-[4/3] rounded-2xl overflow-hidden border-4 border-[#0d9488] shadow-xl ring-2 ring-[#0d9488]/30">
                 <Image
-                  src={food2Image}
+                  src={food9}
                   alt="Fresh food at Sayone Restaurant"
-                  width={food2Image.width}
-                  height={food2Image.height}
+                  width={food9.width}
+                  height={food9.height}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -111,10 +108,25 @@ export default function FoodPage() {
           <div className="pt-8">
             <AnimateInView>
               <h2 className="section-title text-2xl sm:text-3xl font-bold text-[#0f172a] text-center mb-2 reveal-up">Our Menu</h2>
-              <p className="text-slate-600 text-center max-w-xl mx-auto mb-10 reveal-up reveal-delay-1">All items available for dine-in or delivery. Go to Order Food to select items and place your order.</p>
+              <p className="text-slate-600 text-center max-w-xl mx-auto mb-10 reveal-up reveal-delay-1">Food gallery photos.</p>
             </AnimateInView>
-            <AnimateInView>
-              <FoodGrid foods={foods} showDescription />
+            <AnimateInView className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {gallery.map((img, idx) => (
+                <div
+                  key={`food-gallery-${idx}`}
+                  className="bg-white rounded-xl border border-slate-100 overflow-hidden hover-lift"
+                >
+                  <div className="aspect-[4/3] bg-slate-100 relative overflow-hidden">
+                    <Image
+                      src={img}
+                      alt={`Food photo ${idx + 8}`}
+                      fill
+                      className="w-full h-full object-cover"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  </div>
+                </div>
+              ))}
             </AnimateInView>
           </div>
 
