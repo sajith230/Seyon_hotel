@@ -7,7 +7,7 @@ import AnimateInView from "@/components/animations/AnimateInView";
 import FoodGrid from "@/components/food/FoodGrid";
 import type { FoodItem } from "@/data/foods";
 import { getFoods } from "@/lib/storage";
-import { HiOutlineFire, HiOutlineCake, HiOutlineClock, HiOutlineLocationMarker, HiOutlineTruck, HiOutlineOfficeBuilding, HiOutlineSparkles, HiOutlineShoppingBag } from "react-icons/hi";
+import { HiOutlineFire, HiOutlineCake, HiOutlineClock, HiOutlineLocationMarker, HiOutlineTruck, HiOutlineOfficeBuilding, HiOutlineSparkles } from "react-icons/hi";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import Image from "next/image";
 import foodImage from "../image/food1.webp";
@@ -20,7 +20,6 @@ const diningOptions = [
 ];
 
 const exploreMore = [
-  { href: "/order", label: "Order Food", icon: HiOutlineShoppingBag },
   { href: "/rooms", label: "Rooms", icon: HiOutlineOfficeBuilding },
   { href: "/safari", label: "Safari Yala", icon: HiOutlineTruck },
   { href: "/river", label: "Kirindi River", icon: HiOutlineSparkles },
@@ -65,9 +64,7 @@ export default function FoodPage() {
                 </li>
               </ul>
               <div className="mt-8">
-                <Link href="/order">
-                  <PrimaryButton identifier="food-order" buttonText="Order Food for Delivery" className="min-w-[220px]" />
-                </Link>
+                <PrimaryButton identifier="food-order" buttonText="Order Food for Delivery" className="min-w-[220px]" />
               </div>
             </div>
             <div className="relative reveal-up reveal-delay-1">
@@ -79,6 +76,9 @@ export default function FoodPage() {
                   height={food2Image.height}
                   className="w-full h-full object-cover"
                 />
+              </div>
+              <div className="mt-4 flex justify-center">
+                <PrimaryButton identifier="food-whatsapp" buttonText="Order on WhatsApp" className="min-w-[220px]" />
               </div>
               <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-2xl bg-[var(--gold)]/20 border-2 border-[var(--gold)]/40 flex items-center justify-center">
                 <span className="text-[var(--gold)] font-bold text-sm">Fresh</span>

@@ -5,20 +5,20 @@ import Link from "next/link";
 import Image from "next/image";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import AnimateInView from "@/components/animations/AnimateInView";
-import { HiOutlineOfficeBuilding, HiOutlineFire, HiOutlineTruck, HiOutlineSparkles, HiOutlineShoppingBag, HiOutlineLocationMarker, HiOutlinePhone, HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
+import { HiOutlineOfficeBuilding, HiOutlineFire, HiOutlineTruck, HiOutlineSparkles, HiOutlineLocationMarker, HiOutlinePhone, HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 import heroImage from "./image/hero.jpeg";
 import roomImage from "./image/room.jpg";
 import foodImage from "./image/food1.webp";
 import safariImage from "./image/yala.jpg";
 import riverImage from "./image/kiridi2.jpg";
-import orderImage from "./image/order4.webp";
+import photo1 from "./image/1.jpeg";
+import photo2 from "./image/2.jpeg";
 
 const quickLinks = [
   { href: "/rooms", label: "Rooms", desc: "AC & Non-AC", icon: HiOutlineOfficeBuilding, image: roomImage },
   { href: "/food", label: "Food", desc: "Restaurant", icon: HiOutlineFire, image: foodImage },
   { href: "/safari", label: "Safari Yala", desc: "Cab & tours", icon: HiOutlineTruck, image: safariImage },
   { href: "/river", label: "Kirindi River", desc: "Bathing", icon: HiOutlineSparkles, image: riverImage },
-  { href: "/order", label: "Order Food", desc: "We deliver", icon: HiOutlineShoppingBag, image: orderImage },
 ];
 
 const whySayone = [
@@ -40,6 +40,11 @@ const dayAtSayone = [
   { time: "Morning", icon: HiOutlineSun, text: "Wake up to a hearty breakfast at our restaurant or in your room. Head out early for a Yala safari — we arrange the cab and guide." },
   { time: "Afternoon", icon: HiOutlineSparkles, text: "Cool off at Kirindi River or relax at the hotel. Order lunch to your room or enjoy it at the restaurant." },
   { time: "Evening", icon: HiOutlineMoon, text: "Unwind with dinner and a quiet night. We deliver food anytime — just call or place your order online." },
+];
+
+const homePhotos = [
+  { src: photo1, alt: "Sayone photo 1" },
+  { src: photo2, alt: "Sayone photo 2" },
 ];
 
 export default function Home() {
@@ -76,9 +81,7 @@ export default function Home() {
             <Link href="/rooms" className="w-full sm:w-auto">
               <PrimaryButton identifier="hero-cta" buttonText="Explore Rooms" className="min-w-[200px]" />
             </Link>
-            <Link href="/order" className="w-full sm:w-auto">
-              <PrimaryButton identifier="hero-order" buttonText="Order Food" className="min-w-[200px]" />
-            </Link>
+            <PrimaryButton identifier="hero-order" buttonText="Order Food" className="min-w-[200px] w-full sm:w-auto" />
             <Link
               href="/food"
               className="w-full sm:w-auto inline-flex items-center justify-center rounded-md border-2 border-white/80 text-white px-6 py-3 font-medium hover:bg-white/10 transition-colors min-w-[200px]"
@@ -131,6 +134,41 @@ export default function Home() {
                 <div className="p-5 sm:p-6">
                   <h3 className="section-title font-bold text-lg text-[#0f172a]">{item.title}</h3>
                   <p className="mt-2 text-slate-600 text-sm">{item.text}</p>
+                </div>
+              </div>
+            ))}
+          </AnimateInView>
+        </div>
+      </section>
+
+      {/* Photos */}
+      <section className="py-16 sm:py-20 bg-[var(--background)]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <AnimateInView>
+            <div className="text-center max-w-2xl mx-auto mb-10">
+              <h2 className="section-title text-2xl sm:text-3xl font-bold text-[#0f172a] reveal-up">
+                Photos
+              </h2>
+              <p className="mt-3 text-slate-600 reveal-up reveal-delay-1">
+                A quick look at Sayone.
+              </p>
+            </div>
+          </AnimateInView>
+
+          <AnimateInView className="grid md:grid-cols-2 gap-6 lg:gap-8 stagger-children">
+            {homePhotos.map((p) => (
+              <div
+                key={p.alt}
+                className="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover-lift reveal-up"
+              >
+                <div className="relative aspect-[4/3] bg-slate-100">
+                  <Image
+                    src={p.src}
+                    alt={p.alt}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
                 </div>
               </div>
             ))}
@@ -245,9 +283,7 @@ export default function Home() {
                 <Link href="/rooms" className="w-full sm:w-auto">
                   <PrimaryButton identifier="home-book" buttonText="View Rooms" className="min-w-[160px]" />
                 </Link>
-                <Link href="/order" className="text-slate-600 hover:text-[#028EFC] font-medium transition-colors">
-                  Order Food →
-                </Link>
+                <PrimaryButton identifier="home-order" buttonText="Order Food" className="min-w-[160px]" />
                 <Link href="/food" className="text-slate-600 hover:text-[#028EFC] font-medium transition-colors">
                   Restaurant →
                 </Link>

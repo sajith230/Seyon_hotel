@@ -5,13 +5,15 @@ import { GoArrowUpRight } from "react-icons/go";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+const WHATSAPP_NUMBER = "94714147193"; // +94 71 414 7193 (no +, no leading 0)
+
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   identifier: string;
   buttonText: string;
 }
 
 const PrimaryButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ identifier, buttonText, className, ...props }, ref) => {
+  ({ identifier, buttonText, className, onClick, type, ...props }, ref) => {
     const spanRef = useRef<HTMLSpanElement | null>(null);
 
     const calSpanPosition = (
@@ -28,6 +30,14 @@ const PrimaryButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
       spanRef.current.style.left = `${spanLeft}px`;
     };
 
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      onClick?.(e);
+      if (onClick) return;
+      if ((type || "button") === "submit") return;
+      const url = `https://wa.me/${WHATSAPP_NUMBER}`;
+      window.open(url, "_blank", "noopener,noreferrer");
+    };
+
     return (
       <Button
         ref={ref}
@@ -37,6 +47,8 @@ const PrimaryButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
           className
         )}
         onMouseEnter={calSpanPosition}
+        onClick={handleClick}
+        type={type}
         {...props}
       >
         <span className="flex-1 text-center pr-6">{buttonText}</span>

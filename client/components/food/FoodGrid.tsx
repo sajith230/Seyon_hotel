@@ -81,13 +81,13 @@ export default function FoodGrid({
                             </p>
                           )}
                           {showOrderButton && (
-                            <Link href={`/order?item=${item.id}`} className="mt-4">
+                            <div className="mt-4">
                               <PrimaryButton
                                 identifier={`order-${item.id}`}
                                 buttonText="Order"
                                 className="w-full mt-auto"
                               />
-                            </Link>
+                            </div>
                           )}
                         </div>
                       </>

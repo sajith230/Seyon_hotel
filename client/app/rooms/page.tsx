@@ -7,7 +7,7 @@ import AnimateInView from "@/components/animations/AnimateInView";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { HiOutlineCloud, HiOutlineSun, HiOutlineCheck, HiOutlineSparkles, HiOutlineTruck, HiOutlineFire } from "react-icons/hi";
 import roomImage from "../image/room.jpg";
-import { getRooms, getRoomBookings, setRoomBookings, generateId } from "@/lib/storage";
+import { getRooms } from "@/lib/storage";
 import type { RoomItem } from "@/lib/storage";
 
 function getRoomStyle(item: RoomItem) {
@@ -34,73 +34,10 @@ const exploreMore = [
 
 export default function RoomsPage() {
   const [rooms, setRooms] = useState<RoomItem[]>([]);
-  const [bookingOpen, setBookingOpen] = useState(false);
-  const [bookingRoom, setBookingRoom] = useState<RoomItem | null>(null);
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
-  const [guests, setGuests] = useState("1");
-  const [notes, setNotes] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   useEffect(() => {
     setRooms(getRooms());
   }, []);
-
-  const openBookingForm = (room: RoomItem) => {
-    setBookingRoom(room);
-    setName("");
-    setPhone("");
-    setEmail("");
-    setCheckIn("");
-    setCheckOut("");
-    setGuests("1");
-    setNotes("");
-    setSubmitError(null);
-    setSubmitSuccess(false);
-    setBookingOpen(true);
-  };
-
-  const closeBookingForm = () => {
-    setBookingOpen(false);
-    setBookingRoom(null);
-    setSubmitError(null);
-    setSubmitSuccess(false);
-  };
-
-  const handleBookingSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!bookingRoom) return;
-    setSubmitting(true);
-    setSubmitError(null);
-    try {
-      const list = getRoomBookings();
-      list.push({
-        id: generateId(),
-        roomId: bookingRoom.id,
-        roomName: bookingRoom.name,
-        name: name.trim(),
-        phone: phone.trim(),
-        email: email.trim() || undefined,
-        checkIn,
-        checkOut,
-        guests: Math.max(1, parseInt(guests, 10) || 1),
-        notes: notes.trim() || undefined,
-        status: "pending",
-        createdAt: new Date().toISOString(),
-      });
-      setRoomBookings(list);
-      setSubmitSuccess(true);
-    } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Failed to submit booking");
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   return (
     <>
@@ -196,8 +133,6 @@ export default function RoomsPage() {
                         identifier={`room-${room.id}`}
                         buttonText="Book Now"
                         className="min-w-[180px]"
-                        type="button"
-                        onClick={() => openBookingForm(room)}
                       />
                     </div>
                   </div>
@@ -207,143 +142,6 @@ export default function RoomsPage() {
           </AnimateInView>
         </div>
       </section>
-
-      {/* Room booking modal */}
-      {bookingOpen && bookingRoom && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
-          onClick={closeBookingForm}
-        >
-          <div
-            className="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between p-4 border-b border-slate-200">
-              <h2 className="text-lg font-semibold text-slate-900">Book {bookingRoom.name}</h2>
-              <button
-                type="button"
-                onClick={closeBookingForm}
-                className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700"
-                aria-label="Close"
-              >
-                ×
-              </button>
-            </div>
-            {submitSuccess ? (
-              <div className="p-6 text-center">
-                <p className="text-slate-700 font-medium">Booking request sent.</p>
-                <p className="text-slate-600 text-sm mt-2">We&apos;ll confirm with you shortly.</p>
-                <button
-                  type="button"
-                  onClick={closeBookingForm}
-                  className="mt-4 px-4 py-2 rounded-lg bg-[#028EFC] text-white font-medium hover:bg-[#0270d4]"
-                >
-                  Close
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleBookingSubmit} className="p-4 space-y-4">
-                {submitError && (
-                  <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
-                    {submitError}
-                  </div>
-                )}
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Name *</label>
-                  <input
-                    type="text"
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Your name"
-                    className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-[#028EFC] focus:ring-2 focus:ring-[#028EFC]/20 outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Phone *</label>
-                  <input
-                    type="tel"
-                    required
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="e.g. 07xxxxxxxx"
-                    className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-[#028EFC] focus:ring-2 focus:ring-[#028EFC]/20 outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="your@email.com"
-                    className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-[#028EFC] focus:ring-2 focus:ring-[#028EFC]/20 outline-none"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Check-in *</label>
-                    <input
-                      type="date"
-                      required
-                      value={checkIn}
-                      onChange={(e) => setCheckIn(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-[#028EFC] focus:ring-2 focus:ring-[#028EFC]/20 outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Check-out *</label>
-                    <input
-                      type="date"
-                      required
-                      value={checkOut}
-                      onChange={(e) => setCheckOut(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-[#028EFC] focus:ring-2 focus:ring-[#028EFC]/20 outline-none"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Guests *</label>
-                  <input
-                    type="number"
-                    min={1}
-                    required
-                    value={guests}
-                    onChange={(e) => setGuests(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-[#028EFC] focus:ring-2 focus:ring-[#028EFC]/20 outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Notes</label>
-                  <textarea
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Special requests, arrival time, etc."
-                    rows={2}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-[#028EFC] focus:ring-2 focus:ring-[#028EFC]/20 outline-none resize-none"
-                  />
-                </div>
-                <div className="flex gap-3 pt-2">
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="flex-1 px-4 py-2.5 rounded-lg bg-[#028EFC] text-white font-medium hover:bg-[#0270d4] disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    {submitting ? "Submitting…" : "Submit booking"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={closeBookingForm}
-                    className="px-4 py-2.5 rounded-lg border border-slate-200 text-slate-700 font-medium hover:bg-slate-50"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Amenities strip */}
       <section className="py-12 sm:py-16 bg-[var(--background)]">
