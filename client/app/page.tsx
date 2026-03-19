@@ -284,7 +284,7 @@ export default function Home() {
                 </a>
                 <span className="flex items-center gap-2">
                   <HiOutlineLocationMarker size={22} className="text-[#028EFC]" />
-                  Near Yala, Sri Lanka
+                  Wellawaya Road, Thanamalwila
                 </span>
               </div>
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 reveal-up reveal-delay-2">

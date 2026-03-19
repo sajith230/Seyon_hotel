@@ -77,7 +77,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-3">
                 <HiLocationMarker className="mt-0.5 shrink-0 text-[#028EFC]" size={18} />
-                <span>Near Yala, Sri Lanka</span>
+                <span>Wellawaya Road, Thanamalwila</span>
               </li>
               <li className="flex items-center gap-3">
                 <HiPhone className="shrink-0 text-[#028EFC]" size={18} />
